@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import s from './Filter.module.css';
 function Filter(props) {
-  const { filterValue, catchFilterInfo } = props;
+  const { filterValue, onFilter } = props;
   return (
     <label className={s.filter}>
       Find contacts by name
@@ -9,7 +9,7 @@ function Filter(props) {
         className={s.filterInput}
         type="text"
         value={filterValue}
-        onChange={catchFilterInfo}
+        onChange={onFilter}
         pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
@@ -20,7 +20,7 @@ function Filter(props) {
 
 Filter.propTypes = {
   filterValue: PropTypes.string,
-  catchFilterInfo: PropTypes.func /*.isRequired*/,
+  onFilter: PropTypes.func /*.isRequired*/,
 };
 
 export default Filter;

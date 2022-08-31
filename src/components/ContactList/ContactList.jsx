@@ -33,7 +33,7 @@ ContactList.propTypes = {
       id: PropTypes.string.isRequired,
     })
   ),
-  contactOnDelete: PropTypes.func.isRequired,
+  onDeleteContact: PropTypes.func.isRequired,
 };
 
 export default ContactList;

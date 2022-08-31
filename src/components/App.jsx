@@ -13,13 +13,8 @@ import { addContact, removeContact, filterContact } from '../redux/actions.js';
 
 const App = () => {
   // пришли из reducer.js с новыми данными в подписаный компонент. Он получил новые данные и перезаписался
-  const contacts = useSelector(store => store.items);
-  console.log('contacts1: ', contacts);
-  const filterValue = useSelector(store => {
-    console.log('storeApp: ', store);
-    return store.filter;
-  });
-
+  const { contacts, filter } = useSelector(store => store.phonebook);
+  const filterValue = filter;
   // вызвать useDispatch - получить вызвать
   const dispatch = useDispatch();
 
@@ -48,12 +43,9 @@ const App = () => {
   const onfilterContact = e => dispatch(filterContact(e.target.value));
 
   const getVisibleContacts = () => {
-    if (filterValue) {
-      return contacts.filter(contact =>
-        contact.name.toLowerCase().includes(filterValue)
-      );
-    }
-    return contacts;
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filterValue)
+    );
   };
 
   return (
@@ -63,7 +55,7 @@ const App = () => {
         <ContactsForm catchSubmitInfo={onAddContact} />
       </SectionTitle>
       <SectionTitle title="Contacts">
-        <Filter filterValue={filterValue} catchFilterInfo={onfilterContact} />
+        <Filter filterValue={filterValue} onFilter={onfilterContact} />
         {contacts.length ? (
           <ContactList
             contacts={getVisibleContacts()}
