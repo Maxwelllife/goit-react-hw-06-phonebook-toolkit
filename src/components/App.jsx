@@ -1,55 +1,31 @@
 import 'modern-normalize/modern-normalize.css';
-import { useState, useEffect, useRef } from 'react';
+import s from './app.module.css';
+
 import SectionTitle from './Section/SectionTitle';
 import ContactsForm from './ContactsForm/ContactsForm';
 import ContactList from './ContactList/ContactList';
-// import { useSelector } from 'react-redux/es/exports';
-import { useSelector } from 'react-redux';
 import Filter from './Filter/Filter';
-import s from './app.module.css';
 
-import { nanoid } from 'nanoid';
-import { useSearchParams } from 'react-router-dom';
+// в компоненте нужно импортировать useDispatch
+import { useSelector, useDispatch } from 'react-redux';
+// и экшн криейтор - строка 10 //8. в компоненте испортируем actioncreator - removeContact
+import { addContact, removeContact, filterContact } from '../redux/actions.js';
 
 const App = () => {
-  const [contacts, setContacts] = useState([]);
-  // const [filter, setFilter] = useState('');
-  const [searchParams, setSearchParams] = useSearchParams();
-  const firstRender = useRef(true);
-  const filter = searchParams.get('value') ?? '';
+  // пришли из reducer.js с новыми данными в подписаный компонент. Он получил новые данные и перезаписался
+  const contacts = useSelector(store => store.items);
+  console.log('contacts1: ', contacts);
+  const filterValue = useSelector(store => {
+    console.log('storeApp: ', store);
+    return store.filter;
+  });
 
-  useEffect(() => {
-    const contacts = JSON.parse(localStorage.getItem('contacts')) ?? [];
-    if (contacts?.length) {
-      setContacts([...contacts]);
-    }
-  }, []);
+  // вызвать useDispatch - получить вызвать
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!firstRender.current) {
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-      return;
-    }
-    firstRender.current = false;
-  }, [contacts]);
-
-  const onChangeFilterValue = event => {
-    // setFilter(event.target.value);
-
-    const nextParams =
-      event.target.value !== '' ? { value: event.target.value } : {};
-    setSearchParams(nextParams);
-  };
-
-  const compareContacts = () => {
-    const normalizeFilter = filter.toLowerCase().trim();
-    // console.log('filter: ', filter);
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizeFilter)
-    );
-  };
-
-  const addContact = data => {
+  // в функции которая должна менять store сначала получаем action потом передaем его в dispatch
+  const onAddContact = data => {
+    const action = addContact(data);
     const { name } = data;
     if (
       contacts.find(
@@ -58,28 +34,40 @@ const App = () => {
     ) {
       alert(`${name} - this contact already in contact list`);
       return;
-    } else {
-      const contact = { ...data, id: nanoid() };
-      setContacts(prevState => [...prevState, contact]);
+    } else if (name === '') {
+      alert('Please enter your name');
+      return;
     }
+
+    dispatch(action);
+    // dispatch вызывает сам reducer передавая ему текщее значение стора и action -> reducer.js
+  };
+  // 9. Создаем новую Ф.
+  const onRemoveContact = id => dispatch(removeContact(id));
+
+  const onfilterContact = e => dispatch(filterContact(e.target.value));
+
+  const getVisibleContacts = () => {
+    if (filterValue) {
+      return contacts.filter(contact =>
+        contact.name.toLowerCase().includes(filterValue)
+      );
+    }
+    return contacts;
   };
 
-  const deleteContacts = id => {
-    setContacts(prevState => prevState.filter(contact => contact.id !== id));
-  };
-  // const contacts
   return (
     <div className={s.wrap}>
       <SectionTitle title="Phonebook">
         {/* в инфо приходит наш стейт с формы после сабмита и записываеться в параметр дата */}
-        <ContactsForm catchSubmitInfo={addContact} />
+        <ContactsForm catchSubmitInfo={onAddContact} />
       </SectionTitle>
       <SectionTitle title="Contacts">
-        <Filter filterValue={filter} catchFilterInfo={onChangeFilterValue} />
+        <Filter filterValue={filterValue} catchFilterInfo={onfilterContact} />
         {contacts.length ? (
           <ContactList
-            contacts={compareContacts()}
-            contactOnDelete={deleteContacts}
+            contacts={getVisibleContacts()}
+            onDeleteContact={onRemoveContact}
           />
         ) : (
           <p>Your phonebook is empty</p>

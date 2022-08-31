@@ -20,7 +20,7 @@ function Filter(props) {
 
 Filter.propTypes = {
   filterValue: PropTypes.string,
-  catchFilterInfo: PropTypes.func.isRequired,
+  catchFilterInfo: PropTypes.func /*.isRequired*/,
 };
 
 export default Filter;

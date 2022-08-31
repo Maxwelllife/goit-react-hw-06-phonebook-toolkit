@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import s from './ContactList.module.css';
 function ContactList(props) {
-  const { contacts, contactOnDelete } = props;
+  const { contacts, onDeleteContact } = props;
+  console.log('props: ', props);
+  console.log('contacts2: ', contacts);
 
   return (
     <ul>
@@ -12,7 +14,7 @@ function ContactList(props) {
           </p>
           <button
             className={s.button}
-            onClick={() => contactOnDelete(id)}
+            onClick={() => onDeleteContact(id)}
             type="button"
           >
             delete

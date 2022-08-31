@@ -1,21 +1,8 @@
 import { createStore } from 'redux';
+import contactsReducer from './reducer';
 
-const initialStore = {};
-
-// export default (store = initialStore, { type, payload }) => {
-//   switch (type) {
-//     case first:
-//       return { ...store, ...payload };
-
-//     default:
-//       return store;
-//   }
-// };
-const reducer = (store = initialStore) => {
-  return store;
-};
 const store = createStore(
-  reducer,
+  contactsReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 export default store;
