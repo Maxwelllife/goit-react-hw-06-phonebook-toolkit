@@ -14,8 +14,8 @@ import { addContact, removeContact, filterContact } from '../redux/actions.js';
 const App = () => {
   // пришли из reducer.js с новыми данными в подписаный компонент. Он получил новые данные и перезаписался
   const { contacts, filter } = useSelector(state => {
-    console.log('state.phonebook: ', state);
-    return state.contacts.phonebook;
+    console.log('state: ', state);
+    return state.phonebook;
   });
 
   const filterValue = filter;
@@ -24,7 +24,7 @@ const App = () => {
 
   // в функции которая должна менять store сначала получаем action потом передaем его в dispatch
   const onAddContact = data => {
-    const action = addContact(data);
+    const action = addContact(data); // {type: "contact/add", payload: data }
     const { name } = data;
     if (
       contacts.find(

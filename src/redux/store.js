@@ -17,7 +17,7 @@ import contactsReducer from './reducer';
 const persistConfig = {
   key: 'phonebook',
   storage,
-  // whitelist: ['contacts'],
+  whitelist: ['contacts'],
 };
 
 export const persistedContactsReducer = persistReducer(
@@ -26,7 +26,7 @@ export const persistedContactsReducer = persistReducer(
 );
 
 export const store = configureStore({
-  reducer: { contacts: persistedContactsReducer },
+  reducer: { phonebook: persistedContactsReducer },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {

@@ -1,4 +1,4 @@
-import { combineReducers } from '@reduxjs/toolkit';
+// import { combineReducers } from '@reduxjs/toolkit';
 import { createReducer } from '@reduxjs/toolkit';
 // 5. испортируем REMOVE_CONTACT
 import { addContact, removeContact, filterContact } from './actions';
@@ -7,10 +7,9 @@ const initialState = {
   contacts: [],
   filter: '',
 };
-export const phonebookReducer = createReducer(initialState, {
+const phonebookReducer = createReducer(initialState, {
   [addContact]: (state, { payload }) => {
     state.contacts = [...state.contacts, payload];
-    // console.log('payload: ', payload);
   },
   [removeContact]: (state, { payload }) => {
     state.contacts = state.contacts.filter(item => item.id !== payload);
@@ -20,8 +19,9 @@ export const phonebookReducer = createReducer(initialState, {
   },
 });
 
-const contactsReducer = combineReducers({
-  phonebook: phonebookReducer,
-});
+// const contactsReducer = combineReducers({
+//   phonebook: phonebookReducer,
+// });
 
-export default contactsReducer;
+// export default contactsReducer;
+export default phonebookReducer;
