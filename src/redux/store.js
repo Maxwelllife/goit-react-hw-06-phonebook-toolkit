@@ -1,8 +1,38 @@
-import { createStore } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+//на случай если нужно будет записывать не все в локал сторедж импортируем только нужный редюсер
+// import phonebookReducer from './reducer'
 import contactsReducer from './reducer';
 
-const store = createStore(
-  contactsReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+const persistConfig = {
+  key: 'phonebook',
+  storage,
+  // whitelist: ['contacts'],
+};
+
+export const persistedContactsReducer = persistReducer(
+  persistConfig,
+  contactsReducer
 );
-export default store;
+
+export const store = configureStore({
+  reducer: { contacts: persistedContactsReducer },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export const persistor = persistStore(store);

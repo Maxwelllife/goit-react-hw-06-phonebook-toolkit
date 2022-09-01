@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import s from './ContactList.module.css';
 function ContactList(props) {
   const { contacts, onDeleteContact } = props;
-  console.log('props: ', props);
-  console.log('contacts2: ', contacts);
+  // console.log('props: ', props);
+  // console.log('contacts2: ', contacts);
 
   return (
     <ul>

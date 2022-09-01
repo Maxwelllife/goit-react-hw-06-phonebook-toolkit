@@ -13,7 +13,11 @@ import { addContact, removeContact, filterContact } from '../redux/actions.js';
 
 const App = () => {
   // пришли из reducer.js с новыми данными в подписаный компонент. Он получил новые данные и перезаписался
-  const { contacts, filter } = useSelector(store => store.phonebook);
+  const { contacts, filter } = useSelector(state => {
+    console.log('state.phonebook: ', state);
+    return state.contacts.phonebook;
+  });
+
   const filterValue = filter;
   // вызвать useDispatch - получить вызвать
   const dispatch = useDispatch();
